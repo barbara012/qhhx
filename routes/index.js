@@ -23,51 +23,51 @@ module.exports = function (app) {
 		});
 	});
 	// //注册
-	// app.get('/reg', function (req, res) {
-	// 	res.render('reg', {
-	// 		title: '注册',
-	// 		user: req.session.user,
-	// 		success: req.flash('success').toString(),
-	// 		error: req.flash('error').toString()});
-	// });
-	// app.post('/reg', checkNotLogin);
-	// app.post('/reg', function (req, res) {
-	// 	var name = req.body.userName,
-	// 		password = req.body.password,
-	// 		md5 = crypto.createHash('md5'),
-	// 		reg = /`|~|!|#|\$|%|\^|\*|\(|\-|\)|\+|_|=|\/|\||\\|。|，|》|《|>|<|！/;
-	// 	password = md5.update(req.body.password).digest('hex');
-	// 	if (reg.test(name)) {
-	// 		req.flash('error', '用户名不包含非法字符');
-	// 		return res.redirect('/reg');
-	// 	}
-	// 	if (name.length > 20 || name.length === 0) {
-	// 		req.flash('error', '用户名过长');
-	// 		return res.redirect('/reg');
-	// 	}
-	// 	var newUser = new User({
-	// 		name: name,
-	// 		password: password,
-	// 		email: '838186163@qq.com'
-	// 	});
-	// 	//检查用户名与邮箱是否已经存在
-	// 	User.get(newUser.name, function (err, user) {
-	// 		if (user) {
-	// 			req.flash('error', '用户名已存在');
-	// 			return res.redirect('/');
-	// 		}
-	// 		//如果不存在则新增用户
-	// 		newUser.save(function (err, user) {
-	// 			if (err) {
-	// 				req.flash('error', '系统忙');
-	// 				return res.redirect('/');
-	// 			}
-	// 			req.session.user = user;//用户信息存入 session
-	// 			req.flash('success', '注册成功！');
-	// 			return res.redirect('/user_center');
-	// 		});
-	// 	});
-	// });
+	app.get('/reg', function (req, res) {
+		res.render('reg', {
+			title: '注册',
+			user: req.session.user,
+			success: req.flash('success').toString(),
+			error: req.flash('error').toString()});
+	});
+	app.post('/reg', checkNotLogin);
+	app.post('/reg', function (req, res) {
+		var name = req.body.userName,
+			password = req.body.password,
+			md5 = crypto.createHash('md5'),
+			reg = /`|~|!|#|\$|%|\^|\*|\(|\-|\)|\+|_|=|\/|\||\\|。|，|》|《|>|<|！/;
+		password = md5.update(req.body.password).digest('hex');
+		if (reg.test(name)) {
+			req.flash('error', '用户名不包含非法字符');
+			return res.redirect('/reg');
+		}
+		if (name.length > 20 || name.length === 0) {
+			req.flash('error', '用户名过长');
+			return res.redirect('/reg');
+		}
+		var newUser = new User({
+			name: name,
+			password: password,
+			email: '838186163@qq.com'
+		});
+		//检查用户名与邮箱是否已经存在
+		User.get(newUser.name, function (err, user) {
+			if (user) {
+				req.flash('error', '用户名已存在');
+				return res.redirect('/');
+			}
+			//如果不存在则新增用户
+			newUser.save(function (err, user) {
+				if (err) {
+					req.flash('error', '系统忙');
+					return res.redirect('/');
+				}
+				req.session.user = user;//用户信息存入 session
+				req.flash('success', '注册成功！');
+				return res.redirect('/user_center');
+			});
+		});
+	});
 	//关于我们
 	app.get('/about_us', function (req, res) {
 		res.render('about_us', {
@@ -89,7 +89,7 @@ module.exports = function (app) {
 	});
 	app.post('/post_new', checkLogin);
 	app.post('/post_new', function (req, res) {
-		var post = new PostNew(req.body.newtitle, req.body.newcontent);
+		var post = new PostNew(req.body.newtype, req.body.newtitle, req.body.newcontent);
 		post.save(function (err) {
 			if (err) {
 				req.flash('error', '发布失败');
@@ -102,9 +102,11 @@ module.exports = function (app) {
 	//普通用户新闻中心
 	app.get('/new_center', function (req, res) {
 		//判断是否是第一页，并把请求的页数转换成 number 类型
+        var type = req.query.newtype || '1';
+        console.log(type);
 		var page = req.query.p ? parseInt(req.query.p) : 1;
 		//查询并返回第 page 页的 10 篇文章
-		PostNew.getTen(page, function (err, news, total) {
+		PostNew.getTen(page, type, function (err, news, total) {
 			if (err) {
 				news = [];
 			}
@@ -112,6 +114,7 @@ module.exports = function (app) {
 				title: '新闻中心|陕西帝奥电梯|中国一线电梯品牌领跑者',
 				news: news,
 				page: page,
+                newtype: type,
 				isFirstPage: (page - 1) == 0,
 				isLastPage: ((page - 1) * 10 + news.length) == total,
 				user: req.session.user,
@@ -124,9 +127,10 @@ module.exports = function (app) {
 	app.get('/manager_new', checkLogin);
 	app.get('/manager_new', function (req, res) {
 		//判断是否是第一页，并把请求的页数转换成 number 类型
+        var type = req.query.newtype || 1;
 		var page = req.query.p ? parseInt(req.query.p) : 1;
 		//查询并返回第 page 页的 10 篇文章
-		PostNew.getTen(page, function (err, news, total) {
+		PostNew.getTen(page, type, function (err, news, total) {
 			if (err) {
 				news = [];
 			}
@@ -170,6 +174,7 @@ module.exports = function (app) {
 					return res.redirect('/manager_new');
 				};
 				res.render('edit_new', {
+                    type: onenew.type,
 					title: onenew.title,
 					onenew: onenew,
 					user: req.session.user,
@@ -191,6 +196,7 @@ module.exports = function (app) {
 	app.post('/editnew/:id', function (req, res) {
 		PostNew.update(
 			req.params.id,
+			req.body.newtype,
 			req.body.newtitle,
 			req.body.newcontent, function (err) {
 			if (err) {

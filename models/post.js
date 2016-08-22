@@ -2,7 +2,8 @@ var ObjectID = require('mongodb').ObjectID,
 	mongodb = require('./db'),
 	markdown = require('markdown').markdown;
 
-function Post(title, post) {
+function Post(type,title, post) {
+	this.type = type;
 	this.title = title;
 	this.post = post;
 }
@@ -24,10 +25,12 @@ Post.prototype.save = function(callback) {
 	//要存入数据库的文档
 	var post = {
 		time: time,
+        type: this.type,
 		title: this.title,
 		post: this.post,
 		pv: 0
 	};
+    console.log(post);
 	//打开数据库
 	mongodb.open(function (err, db) {
 		if (err) {
@@ -54,7 +57,7 @@ Post.prototype.save = function(callback) {
 };
 
 //一次获取十篇文章
-Post.getTen = function(page, callback) {
+Post.getTen = function(page, type, callback) {
 	//打开数据库
 	mongodb.open(function (err, db) {
 		if (err) {
@@ -70,7 +73,9 @@ Post.getTen = function(page, callback) {
 			//使用 count 返回特定查询的文档数 total
 			collection.count(query, function (err, total) {
 			//根据 query 对象查询，并跳过前 (page-1)*10 个结果，返回之后的 10 个结果
-				collection.find(query, {
+				collection.find({
+                    type: type
+                }, {
 					skip: (page - 1)*10,
 					limit: 10
 				}).sort({
@@ -167,7 +172,7 @@ Post.edit = function(id, callback) {
 	});
 };
 //更新一篇文章及其相关信息
-Post.update = function(id, title, post, callback) {
+Post.update = function(id, type ,title, post, callback) {
 	var date = new Date(),
 		time = {
 			date: date,
@@ -193,6 +198,7 @@ Post.update = function(id, title, post, callback) {
 				"_id": new ObjectID(id)
 			}, {
 				$set: {
+                    type: type,
 					title: title,
 					time: time,
 					post: post
