@@ -13,8 +13,8 @@
 	"dependencies": {
 		"express": "^4.8.0",
 		"ejs": "0.8.8",
-		"mongodb": "1.4.15",
-		"connect-mongo": "0.4.1",
+		"mongodb": "2.0.42",
+		"connect-mongo": "0.8.2",
 		"connect-flash": "0.1.1",
 		"markdown": "*",
 		"nodemailer": "*",

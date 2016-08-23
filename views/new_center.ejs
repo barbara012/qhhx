@@ -25,9 +25,9 @@
 			</div>
 			<div class="viewport viewport_new-list">
 				<div class="tab__nav clearfix">
-					<a href="javascript:;" class="tab__nav__item active">新闻媒体</a>
-					<a href="javascript:;" class="tab__nav__item">市场活动</a>
-					<a href="javascript:;" class="tab__nav__item">团建分享</a>
+					<a href="/new_center?newtype=1" class="tab__nav__item <%= newtype== 1 ? 'active' : '' %>">新闻媒体</a>
+					<a href="/new_center?newtype=2" class="tab__nav__item <%= newtype== 2 ? 'active' : '' %>">市场活动</a>
+					<a href="/new_center?newtype=3" class="tab__nav__item <%= newtype== 3 ? 'active' : '' %>">团建分享</a>
 				</div>
 				<div class="viewport__content tab__content">
 					<div class="tab__content__cnt active">

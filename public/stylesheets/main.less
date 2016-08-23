@@ -19,7 +19,7 @@ h1 {
 h2 {
 	font-size: 20px;
 }
-input, button, textarea,code {
+input, button, textarea,code,select {
 	font-family: inherit;
 }
 a {
@@ -352,20 +352,23 @@ code {
 		}		
 	}
 	.btn-post-new {
-		width: 140px;
-		height: 40px;
+		width: 141px;
+		height: 41px;
 		font-size: 20px;
-		line-height: 40px;
+		line-height: 41px;
 		text-align: center;
 		text-decoration: none;
 		border-radius: 2px;
-		background-color: #015198;
+		background-color: #37BCD0;
 		color: #fff;
 	}
 	.operate {
 		margin-left: 100px;
-		a:first-child {
-			margin-right: 20px;
+		a {
+			&:last-child {
+				margin-left: 20px;
+				color: #f00;
+			}
 		}
 	}
 	.tab__content__cnt {
@@ -609,7 +612,8 @@ code {
 		font-size: 20px;
 		line-height: 50px;
 	}
-	input[type="text"] {
+	input[type="text"],
+	select {
 		height: 50px;
 		padding: 10px;
 		font-size: 18px;
@@ -624,8 +628,14 @@ code {
 		height: 240px;
 	}
 	#post__title,
-	#post__content {
+	#post__content,
+	#post__type{
 		width: 90%;			
+	}
+	#post__type {
+		option {
+			height: 40px;
+		}
 	}
 	#post__content {
 		padding: 10px;
@@ -1032,11 +1042,6 @@ code {
 	}
 }
 //后台
-.backend,
-.message-center,
-.manager {
-	background-color: #1372c6;
-}
 .logon-page {
 	.login-form {
 		width: 540px;
@@ -1053,9 +1058,7 @@ code {
 		height: 77px;
 		line-height: 80px;
 		padding-left: 175px;
-		background-color: #085ca5;
-		background-image: url(../img/logo.png);
-		background-repeat: no-repeat;
+		background: #085ca5 url(/img/logo.png) no-repeat;
 		color: #fff;
 		font-size: 25px;
 	}
@@ -1119,10 +1122,10 @@ code {
 	}
 	.option__item {
 		font-size: 16px;
-		width: 215px;
+		width: 190px;
 		height: 260px;
 		float: left;
-		margin-left: 34px;
+		margin-left: 18px;
 		background-color: #fff;
 		border-radius: 2px;
 		text-align: center;
@@ -1136,18 +1139,23 @@ code {
 		height: 140px;
 		display: inline-block;
 		margin-bottom: 15px;
+		background-position: center;
+		background-repeat: no-repeat;
 	}
 	.icon-new {
-		background-image: url(../img/backend/new.jpg);
+		background-image: url(../img/backend/new.png);
+	}
+	.icon-link {
+		background-image: url(../img/backend/link.png);
 	}
 	.icon-job {
-		background-image: url(../img/backend/job.jpg);
+		background-image: url(../img/backend/job.png);
 	}
-	.icon-message {
-		background-image: url(../img/backend/message.jpg);
+	.icon-product {
+		background-image: url(../img/backend/product.png);
 	}
-	.icon-analysis {
-		background-image: url(../img/backend/analysis.jpg);
+	.icon-partner {
+		background-image: url(../img/backend/partner.png);
 	}
 	.logout-container {
 		text-align: right;
@@ -1162,6 +1170,34 @@ code {
 		display: inline-block;
 		text-align: center;
 		font-size: 18px;
+	}
+}
+.manager {
+	.viewport__content {
+		padding: 30px;
+	}
+	.viewport__title {
+		text-align: left;
+		font-size: 32px;
+		height: auto;
+		line-height: 1.4;
+		color: #212121;
+		font-weight: normal;
+		border-bottom: 1px solid #37BCD0;
+		padding-bottom: 15px;
+	}
+	.news__list {
+		padding: 0;
+	}
+	.new__item {
+		padding: 10px 0;
+		border-bottom-width: 0;
+		a {
+			color: #212121;
+			&:before {
+				display: none;
+			}
+		}
 	}
 }
 .page404 {
