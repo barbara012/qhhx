@@ -69,13 +69,16 @@ Post.getTen = function(page, type, callback) {
 				mongodb.close();
 				return callback(err);
 			}
-			var query = {};
+            var query = {};
+			if (type) {
+                query = {
+                    type: type
+                }
+            }
 			//使用 count 返回特定查询的文档数 total
 			collection.count(query, function (err, total) {
 			//根据 query 对象查询，并跳过前 (page-1)*10 个结果，返回之后的 10 个结果
-				collection.find({
-                    type: type
-                }, {
+				collection.find(query, {
 					skip: (page - 1)*10,
 					limit: 10
 				}).sort({
@@ -86,9 +89,10 @@ Post.getTen = function(page, type, callback) {
 						return callback(err);
 					}
 					//解析 markdown 为 html
-					docs.forEach(function (doc) {
-						doc.post = markdown.toHTML(doc.post);
-					});
+					// docs.forEach(function (doc) {
+					// 	doc.post = markdown.toHTML(doc.post);
+					// });
+					console.log(total);
 					callback(null, docs, total);
 				});
 			});
@@ -137,7 +141,7 @@ Post.getOne = function(id, callback) {
 					);
 						
 			//解析 markdown 为 html
-						doc.post = markdown.toHTML(doc.post);
+			// 			doc.post = markdown.toHTML(doc.post);
 						callback(null, doc);//返回查询的一篇文章						
 					}
 				}

@@ -35,7 +35,7 @@ app.use(flash());
 app.use(favicon(__dirname + '/public/images/favicon/favicon.ico'));
 app.use(logger('dev'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extend: false}));
+app.use(bodyParser.urlencoded({extended: false}));
 
 app.use(multer({
 	dest: './public/images/dbimg',
@@ -72,5 +72,5 @@ app.use(passport.initialize());
 routes(app);
 
 http.createServer(app).listen(app.get('port'), function(){
- 	console.log('药！药！切克闹，煎饼果子来一套 ' + app.get('port'));
+ 	console.log('人生苦短，及时行乐 ' + app.get('port'));
 });

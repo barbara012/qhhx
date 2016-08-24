@@ -22,29 +22,29 @@
 					</ul>
 				</div>
 			</div>
-			<div class="viewport viewport_post-new">
+			<div class="viewport viewport_post-product">
 				<div class="viewport__content">
-					<form action="/post_new" method="post">
+					<form action="/post_product" method="post" enctype='multipart/form-data'>
 						<div class="form__item clearfix">
-							<label for="post__title" class="form__item__label">新闻分类</label>
+							<label for="post__title" class="form__item__label">产品封面</label>
 							<div class="text-wrapper">
-								<select name="newtype" class="form__item__select" required="required" id="post__type">
-									<option value="1" selected>新闻媒体</option>
-									<option value="2">市场活动</option>
-									<option value="3">团建分享</option>
-								</select>
+								<div class="product__preview"></div>
+								<div class="file-wrapper">
+									<input type="file" name="product" id="product-picture">
+									<div class="tip">请选择你要你要发布到企业logo图片</div>
+								</div>
 							</div>
 						</div>
 						<div class="form__item clearfix">
-							<label for="post__title" class="form__item__label">新闻标题</label>
+							<label for="post__title" class="form__item__label">产品标题</label>
 							<div class="text-wrapper">
-								<input type="text" class="form__item__text" required="required" name="newtitle" id="post__title">
+								<input type="text" class="form__item__text" required="required" name="title" id="post__title">
 							</div>
 						</div>
 						<div class="form__item clearfix">
-							<label for="post_content" class="form__item__label">新闻内容</label>
+							<label for="post_content" class="form__item__label">产品描述</label>
 							<div class="text-wrapper">
-								<textarea name="newcontent" required="required" id="post__content"></textarea>
+								<textarea type="text" placeholder="请填写产品描述" name="desc" required="required" id="post__desc"></textarea>
 							</div>
 						</div>
 						<div class="form__item txt-c">
@@ -59,7 +59,7 @@
 			<script type="text/javascript" src="/simditor/scripts/hotkeys.js"></script>
 			<script type="text/javascript" src="/simditor/scripts/uploader.js"></script>
 			<script type="text/javascript" src="/simditor/scripts/simditor.js"></script>
-			<script src="/js/postImg.js"></script>
+			<script src="/js/postProduct.js"></script>
 		</div>
 	</body>
 </html>
