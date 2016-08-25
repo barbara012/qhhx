@@ -4,8 +4,7 @@
 		<% include head %>
 	</head>
 	<body>
-		<div class="recruit manager">
-			<img src="/img/backend/bg.jpg" alt="青海恒信融锂业科技有限公司" class="page__bg">
+		<div class="manager manager_recruit">
 			<div class="page-nav">
 				<div class="nav-content common-w clearfix">
 					<a href="/" class="logo-container float-l"></a>
@@ -25,30 +24,26 @@
 				<div class="viewport__content">
 					<% if (user) {%>
 					<h1 class="viewport__title clearfix">
-						人力资源
+						招聘信息管理
 						<a href="/post_job" class="btn-post-new float-r">发布招聘</a>
 					</h1>
-					<div class="job_list">
-						<table>
-							<tr>
-								<th>招聘职位</th>
-								<th>招聘人数</th>
-								<th>发布日期</th>
-								<th>操作</th>
-							</tr>
-							<% jobs.forEach(function (job, index) {%>
-							<tr>
-								<td><a target="_blank" href="/job/<%= job._id %>"><%= job.title %></td>
-								<td><%= job.number %></td>
-								<td><%= job.time.minute %></td>
-								<td class="operate">
-									<a href="/editjob/<%= user.name %>/<%= job._id %>">编辑</a>
-									<a href="/deletejob/<%= user.name %>/<%= job._id %>">删除</a>
-								</td>
-							</tr>
-							<% }) %>
-						</table>
-						<% include paging %>
+					<div class="viewport__content_subtitle">
+						<span class="float-l">招聘岗位</span>
+						<span class="float-r">操作</span>
+					</div>
+					<div class="list-wrapper">
+						<div class="list">
+							<% jobs.forEach(function(job) {%>
+							<div class="item clearfix">
+								<a href="/recruit" target="_blank" class="item__title float-l"><%= job.title %></a>
+								<div class="operate float-r">
+									<a href="/edit/job/<%= job._id %>">编辑</a>
+									<a href="/delete/job/<%= job._id %>">删除</a>
+								</div>
+							</div>
+							<%})%>
+							<% include paging %>
+						</div>
 					</div>
 					<% } %>
 				</div>	

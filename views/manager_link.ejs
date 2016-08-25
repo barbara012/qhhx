@@ -20,21 +20,20 @@
 					</ul>
 				</div>
 			</div>
-			<div class="viewport viewport_new-list">
+			<div class="viewport viewport_link-list">
 				<div class="viewport__content">
 					<% if (user) {%>
-					<h1 class="viewport__title clearfix">新闻中心						
-						<a href="/post_new" class="btn-post-new float-r">发布新闻</a>
+					<h1 class="viewport__title clearfix">行业链接管理
+						<a href="/post_link" class="btn-post-new float-r">发布行业链接</a>
 					</h1>
 					<div class="list">
-					<% news.forEach(function (one, index) { %>
+					<% links.forEach(function (one) { %>
 						<div class="item clearfix">
-							<a href="/new/<%= one._id %>" target="_blank" class="item__title float-l"><%= one.title %></a>
+							<a href="<%= one.url %>" target="_blank" class="item__title float-l"><%= one.title %></a>
 							<div class="operate float-r">
-								<a href="/edit/new/<%= user.name  %>/<%= one._id %>">编辑</a>
-								<a href="/delete/new/<%= user.name  %>/<%= one._id %>">删除</a>
+								<a href="/edit/link/<%= one._id %>">编辑</a>
+								<a href="/delete/link/<%= one._id %>">删除</a>
 							</div>
-							<span class="new__date float-r"><%= one.time.minute %></span>							
 						</div>
 					<% }) %>
 						<% include paging %>

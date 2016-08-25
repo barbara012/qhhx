@@ -9,6 +9,7 @@ var crypto = require('crypto'),
 	PostJob = require('../models/postJob.js'),
 	PostProduct = require('../models/postProduct.js'),
 	PostPartner = require('../models/postPartner.js'),
+	PostLink = require('../models/postLink.js'),
 	Pic = require('../models/pic.js'),
 	Message = require('../models/message.js'),
 	Email = require('../models/email.js'),
@@ -533,33 +534,144 @@ module.exports = function (app) {
 	});
 	//行业链接
 	app.get('/links', function (req, res) {
-		res.render('links', {
-			title: '客户案例展示|陕西帝奥电梯|中国一线电梯品牌领跑者',
-			user: req.session.user,
-			success: req.flash('success').toString(),
-			error: req.flash('error').toString()
-		});
-	});
-	//人力资源中心，普通用户
-	app.get('/recruit', function (req, res) {
-		//判断是否是第一页，并把请求的页数转换成 number 类型
 		var page = req.query.p ? parseInt(req.query.p) : 1;
-		// 查询并返回第 page 页的 10 篇文章
-		PostJob.getTen(page, function (err, jobs, total) {
-			if (err) {
-				jobs = [];
-			}
-			res.render('recruit', {
-				title: '人力资源|陕西帝奥电梯|中国一线电梯品牌领跑者',
-				jobs: jobs,
+		PostLink.getTen(page, function (err, links, total) {
+			res.render('links', {
+				title: '行业链接-青海恒信融锂业科技有限公司',
+				links: links,
 				page: page,
 				isFirstPage: (page - 1) == 0,
-				isLastPage: ((page - 1) * 10 + jobs.length) == total,
+				isLastPage: ((page - 1) * 10 + links.length) == total,
+				user: req.session.user,
+				success: req.flash('success').toString(),
+				error: req.flash('error').toString()
+			});
+		})
+	});
+	//行业链接管理后台
+	app.get('/manager_link', checkLogin);
+	app.get('/manager_link', function (req, res) {
+		//判断是否是第一页，并把请求的页数转换成 number 类型
+		var page = req.query.p ? parseInt(req.query.p) : 1;
+		//查询并返回第 page 页的 10 个链接
+		PostLink.getTen(page, function (err, links, total) {
+			if (err) {
+				links = [];
+			}
+			res.render('manager_link', {
+				title: '管理行业链接-青海恒信融锂业科技有限公司',
+				links: links,
+				page: page,
+				isFirstPage: (page - 1) == 0,
+				isLastPage: ((page - 1) * 10 + links.length) == total,
 				user: req.session.user,
 				success: req.flash('success').toString(),
 				error: req.flash('error').toString()
 			});
 		});
+	});
+	//上传行业链接
+	app.get('/post_link', checkLogin);
+	app.get('/post_link', function (req, res) {
+		res.render('post_link', {
+			title: '上传行业链接-青海恒信融锂业科技有限公司',
+			editType: 'new',
+			user: req.session.user,
+			success: req.flash('success').toString(),
+			error: req.flash('error').toString()
+		});
+	});
+	app.post('/post_link', checkLogin);
+	app.post('/post_link', function (req, res) {
+		var postLink = new PostLink(req.body.title, req.body.url);
+		postLink.save(function (err) {
+			if (err) {
+				req.flash('error', '发布失败');
+				return res.redirect('/post_link');
+			}
+			req.flash('success', '发布成功!');
+			res.redirect('/manager_link');
+		});
+	});
+	//编辑行业链接
+	app.get('/edit/link/:id', checkLogin);
+	app.get('/edit/link/:id', function (req, res) {
+		PostLink.edit(req.params.id, function (err, link) {
+			if (err) {
+				req.flash('error', err);
+				console.log(err);
+				return res.redirect('/manager_link');
+			}
+			console.log(link);
+			res.render('post_link', {
+				link: link,
+				editType: 'edit',
+				title: '编辑行业链接-青海恒信融锂业科技有限公司' ,
+				user: req.session.user,
+				success: req.flash('success').toString(),
+				error: req.flash('error').toString()
+			});
+		});
+
+	});
+	app.post('/edit/link/:id', checkLogin);
+	app.post('/edit/link/:id', function (req, res) {
+		PostLink.update(
+			req.params.id,
+			req.body.title,
+			req.body.url,
+			function (err) {
+				if (err) {
+					console.log('err');
+					req.flash('error', err);
+					return res.redirect('/manager_link');
+				}
+				req.flash('success', '修改成功!');
+				return res.redirect('/manager_link');
+			});
+	});
+	app.get('/delete/link/:id', checkLogin);
+	app.get('/delete/link/:id', function(req, res) {
+		PostLink.remove(req.params.id, function (err) {
+			if (err) {
+				req.flash('error', err);
+				return res.redirect('back');
+			}
+			req.flash('success', '删除成功!');
+			res.redirect('/manager_link');
+		});
+	});
+	//加入 我们
+	app.get('/recruit', function (req, res) {
+		PostJob.getAll(function (err, jobs) {
+			if (err) {
+				jobs = [];
+			}
+			res.render('recruit', {
+				title: '加入我们-青海恒信融锂业科技有限公司',
+				jobs: jobs,
+				job: jobs.length > 0 ? jobs[0] : 0,
+				user: req.session.user,
+				success: req.flash('success').toString(),
+				error: req.flash('error').toString()
+			});
+		});
+	});
+	//获取单个职位信息
+	app.get('/job', function (req, res) {
+		PostJob.getOne(req.query.jobId, function (err, job){
+			if (err) {
+				return res.send({
+					state: false
+				});
+			} else {
+				return res.send({
+					state: true,
+					job: job
+				});
+			}
+
+		})
 	});
 	//人力资源中心，管理员
 	app.get('/manager_job', checkLogin);
@@ -572,7 +684,7 @@ module.exports = function (app) {
 				jobs = [];
 			}
 			res.render('manager_job', {
-				title: '人力资源|陕西帝奥电梯|中国一线电梯品牌领跑者',
+				title: '招聘信息管理-青海恒信融锂业科技有限公司',
 				jobs: jobs,
 				page: page,
 				isFirstPage: (page - 1) == 0,
@@ -587,7 +699,8 @@ module.exports = function (app) {
 	app.get('/post_job', checkLogin);
 	app.get('/post_job', function (req, res) {
 		res.render('post_job', {
-			title: '发布',
+			title: '发布-青海恒信融锂业科技有限公司',
+			editType: 'new',
 			user: req.session.user,
 			success: req.flash('success').toString(),
 			error: req.flash('error').toString()
@@ -596,12 +709,8 @@ module.exports = function (app) {
 	app.post('/post_job', checkLogin);
 	app.post('/post_job', function (req, res) {
 		var postJob = new PostJob(
-			req.body.jobtitle, 
-			req.body.jobnumber, 
-			req.body.jobsex, 
-			req.body.jobage, 
-			req.body.jobsalary,
-			req.body.jobcontent
+			req.body.title,
+			req.body.content
 		);
 		postJob.save(function (err) {
 			if (err) {
@@ -612,59 +721,32 @@ module.exports = function (app) {
 			res.redirect('/manager_job');
 		});
 	});
-	app.get('/job/:id', function (req, res) {
+	app.get('/edit/job/:id', checkLogin);
+	app.get('/edit/job/:id', function (req, res) {
 		PostJob.getOne(req.params.id, function (err, job) {
 			if (err) {
 				req.flash('error', err);
 				console.log(err);
 				return res.redirect('/recruit');
-			};
-			res.render('job', {
+			}
+			res.render('post_job', {
 				title: job.title,
 				job: job,
+				editType: 'edit',
 				user: req.session.user,
 				success: req.flash('success').toString(),
 				error: req.flash('error').toString()
 			});
 		});
-	});
-	app.get('/editjob/:user/:id', checkLogin);
-	app.get('/editjob/:user/:id', function (req, res) {
-		if (req.session.user.name === req.params.user) {
-			PostJob.getOne(req.params.id, function (err, job) {
-				if (err) {
-					req.flash('error', err);
-					console.log(err);
-					return res.redirect('/recruit');
-				};
-				res.render('edit_job', {
-					title: job.title,
-					job: job,
-					user: req.session.user,
-					success: req.flash('success').toString(),
-					error: req.flash('error').toString()
-				});
-			});
-		} else {
-			if (err) {
-				req.flash('error', '没有权限');
-				console.log(err);
-				return res.redirect('/recruit');
-			};
-		}
 
 	});
 	//编辑职位
-	app.post('/edit_job/:id', checkLogin);
-	app.post('/edit_job/:id', function (req, res) {
+	app.post('/edit/job/:id', checkLogin);
+	app.post('/edit/job/:id', function (req, res) {
 		PostJob.update(
 			req.params.id,
-			req.body.jobtitle,
-			req.body.jobnumber,
-			req.body.jobsex,
-			req.body.jobage,
-			req.body.jobsalary,
-			req.body.jobcontent, function (err) {
+			req.body.title,
+			req.body.content, function (err) {
 			if (err) {
 				console.log('err');
 				req.flash('error', err);
@@ -675,13 +757,8 @@ module.exports = function (app) {
 		});
 	});
 	//删除职位
-	app.get('/deletejob/:user/:id', checkLogin);
-	app.get('/deletejob/:user/:id', function (req, res) {
-		if (req.session.user.name !== req.params.user) {
-			req.flash('error', '权限不够');
-			return res.redirect('recruit');
-		}
-		console.log(32);
+	app.get('/delete/job/:id', checkLogin);
+	app.get('/delete/job/:id', function (req, res) {
 		PostJob.remove(req.params.id, function (err) {
 			if (err) {
 				req.flash('error', err);
@@ -689,24 +766,6 @@ module.exports = function (app) {
 			}
 			req.flash('success', '删除成功!');
 			res.redirect('recruit');
-		});
-	});
-	//人力资源1
-	app.get('/jobone', function (req, res) {
-		res.render('jobone', {
-			title: '业务员|陕西帝奥电梯',
-			user: req.session.user,
-			success: req.flash('success').toString(),
-			error: req.flash('error').toString()
-		});
-	});
-	//人力资源2
-	app.get('/jobtwo', function (req, res) {
-		res.render('jobtwo', {
-			title: '行政文员|陕西帝奥电梯',
-			user: req.session.user,
-			success: req.flash('success').toString(),
-			error: req.flash('error').toString()
 		});
 	});
 	//联系我们

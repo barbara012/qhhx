@@ -5,7 +5,6 @@
 	</head>
 	<body>
 		<div class="custom-case">
-			<img src="/img/custom_case/bg.jpg" alt="青海恒信融锂业科技有限公司" class="page__bg">
 			<div class="page-nav">
 				<div class="nav-content common-w clearfix">
 					<a href="/" class="logo-container float-l"></a>
@@ -27,21 +26,15 @@
 						<h1 class="viewport__title">行业链接</h1>
 					</div>
 					<div class="case-wrapper">
-						<div class="pic-show"></div>
+						<div class="pic-show"><img src="/img/custom_case/dp.jpg" alt="行业链接-青海恒信融锂业科技有限公司"></div>
 						<ul class="link-list">
-							<li>
-								<a href="">高工锂电 <span class="right_icon"></span></a>
-							</li>
-							<li>
-								<a href="">高工锂电 <span class="right_icon"></span></a>
-							</li>
-							<li>
-								<a href="">高工锂电 <span class="right_icon"></span></a>
-							</li>
-							<li>
-								<a href="">高工锂电 <span class="right_icon"></span></a>
-							</li>
+							<% links.forEach(function(link) {%>
+								<li>
+									<a href="<%= link.url %>" target="_blank"><%= link.title %> <span class="right_icon"></span></a>
+								</li>
+							<%})%>
 						</ul>
+						<% include paging %>
 					</div>
 				</div>
 			</div>

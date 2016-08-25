@@ -10,7 +10,7 @@
         fR.onload=function(){
             var img = new Image();
             img.src = fR.result;
-            $('.product__preview').empty().append(img);
+            $('.product__preview').addClass('hasImg').empty().append(img);
             $('#defaultPic').val('');
         }
 	});
