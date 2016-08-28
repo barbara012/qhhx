@@ -261,6 +261,78 @@ code {
 
 	}
 }
+.image-gallery {
+	position: absolute;
+	right: 46px;
+	top: 11px;
+	z-index: 10;
+	color: #999;
+}
+.gallery__main {
+	.gallery__form {
+		padding: 20px;
+		width: 200px;
+		height: 100px;
+		border: 1px solid #e0e0e0;
+		background: #fff;
+		position: absolute;
+		right: 10px;
+		top: 100px;
+		display: none;
+		text-align: center;
+	}
+	.list-wrapper {
+		height: 440px;
+		padding: 30px 0;
+		overflow: auto;
+		font-size: 0;
+	}
+	.pic-item {
+		width: 200px;
+		margin: 0 17px 20px;
+		font-size: 14px;
+		display: inline-block;
+		vertical-align: top;
+	}
+	.pic__url {
+		padding-top: 5px;
+		height: 60px;
+		font-size: 12px;
+		color: #999;
+		word-break: break-all;
+	}
+	.pic-wrapper {
+		width: 200px;
+		height: 130px;
+		text-align: center;
+		position: relative;
+		border: 1px solid #e0e0e0;
+		img {
+			position: absolute;
+			max-width: 100%;
+			max-height: 100%;
+			top: 0;
+			left: 0;
+			bottom: 0;
+			right: 0;
+			margin: auto;
+		}
+	}
+	.submit {
+		display: inline-block;
+		width: 50px;
+		height: 24px;
+		line-height: 24px;
+		text-align: center;
+		background: #37BCD0;
+		color: #fff;
+		margin-top: 20px;
+		text-decoration: none;
+		&.disabled {
+			background: #cdcdcd;
+		}
+	}
+}
 .footer {
 	width: 100%;
 	height: 80px;
@@ -607,6 +679,12 @@ code {
 		margin-top: 10px;
 		font-size: 12px;
 		color: #aaa;
+		img {
+			display: none;
+		}
+		ul,ol {
+			list-style-position: inside;
+		}
 	}
 }
 .post-new {
@@ -620,6 +698,7 @@ code {
 	}
 	.form__item {
 		margin-top: 20px;
+		position: relative;
 		&:first-child {
 			margin-top: 0;
 		}

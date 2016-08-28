@@ -860,69 +860,55 @@ module.exports = function (app) {
 			});
 		});
 	});
-	//上传一则消息
-	app.post('/leave_message', function (req, res) {
-		if (req.body.email == '' || req.body.message == '') {
-			req.flash('error', '请填写完事留言信息');
-			return res.redirect('/');
-		}
-		var mes = new Message(req.body.username, req.body.useremail, req.body.message);
-		mes.save(function (err) {
+	//图库
+	app.get('/gallery', checkLogin);
+	app.get('/gallery', function (req, res) {
+		Pic.getAll(function (err, pics) {
 			if (err) {
-				req.flash('error', '留言失败，可能是系统忙=。=');
-				return res.redirect('/');
+				pics = [];
 			}
-			res.redirect('/');
-		});
-	});
-	//查看消息详情
-	app.get('/mess/:id', function (req, res) {
-		Message.getOne(req.params.id, function (err, message) {
-			if (err) {
-				return res.redirect('/leave_message');
-			}
-			return res.send({
-				name: message.name,
-				email: message.email,
-				message: message.message
+			console.log(pics);
+			res.render('gallery', {
+				title: '图库-青海恒信融锂业科技有限公司',
+				pics: pics,
+				user: req.session.user,
+				success: req.flash('success').toString(),
+				error: req.flash('error').toString()
 			});
 		});
 	});
 	//上传图片
-	app.post('/uploadimg', function (req, res) {
-		var dbpic = [],
-			blobArr,
-			pic;
+	app.post('/gallery/upload', checkLogin);
+	app.post('/gallery/upload', function (req, res) {
+		var pics = [];
 		for (var i in req.files) {
 			if (req.files[i].size == 0){
 			// 使用同步方式删除一个文件
 				fs.unlinkSync(req.files[i].path);
 				console.log('Successfully removed an empty file!');
 			} else {
-				var date = new Date();
-				
+
 				var target_path = './public/images/dbimg/' + req.files[i].name;
 			// 使用同步方式重命名一个文件
 				fs.renameSync(req.files[i].path, target_path);
 
 				var dbImgUrl = '/images/dbimg/' + req.files[i].name;
-				
-				var time = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate() + " " + 
-					date.getHours() + ":" + (date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes());
-				blobArr = {};
-				blobArr.time = time;
-				blobArr.pic = dbImgUrl;
-				blobArr.ower = req.params.ower;
-				dbpic.push(blobArr);
+				pics.push({
+					url: dbImgUrl
+				});
 			}
 		}
-		pic = new Pic(dbpic);
-		pic.save(function (err){
+		var pic = new Pic(pics);
+		pic.save(function (err, url){
 			if (err) {
-				req.flash('error', err); 
+				console.log(err);
+				req.flash('error', err);
 			}
 			req.flash('success', '文件上传成功!');
-			res.send(blobArr.pic);
+			return res.send({
+				state: true,
+				url: pics[0].url
+			});
 		});
 	});
 	//用户中心
