@@ -2,13 +2,9 @@ var ObjectID = require('mongodb').ObjectID,
 	mongodb = require('./db'),
 	markdown = require('markdown').markdown;
 
-function PostJob(title,number, sex, age, salary,job) {
+function PostJob(title, content) {
 	this.title = title;
-	this.number = number;
-	this.sex = sex;
-	this.age = age;
-	this.salary = salary;
-	this.job = job;
+	this.content = content;
 }
 
 module.exports = PostJob;
@@ -26,14 +22,10 @@ PostJob.prototype.save = function(callback) {
 		date.getHours() + ":" + (date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()) 
 	}
 	//要存入数据库的文档
-	var PostJob = {
+	var job = {
 		time: time,
 		title: this.title,
-		number: this.number,
-		sex: this.sex,
-		age: this.age,
-		salary: this.salary,
-		job: this.job,
+		content: this.content,
 		pv: 0
 	};
 	//打开数据库
@@ -48,7 +40,7 @@ PostJob.prototype.save = function(callback) {
 				return callback(err);
 			}
 			//将文档插入 jobs 集合
-			collection.insert(PostJob, {
+			collection.insert(job, {
 				safe: true
 			}, function (err) {
 				mongodb.close();
@@ -137,31 +129,28 @@ PostJob.getOne = function(id, callback) {
 				{
 					'_id': new ObjectID(id)
 				},
-				function (err, doc) {					
+				function (err, job) {
 					if (err) {
 						mongodb.close();
 						return callback(err);
 					}
-					if (doc) {
+					if (job) {
 					//每访问 1 次，pv 值增加 1
-					collection.update(
-						{
-							'_id': new ObjectID(id)
-						},
-						{
-							$inc: {"pv": 1}
-						},
-						function (err) {
-							mongodb.close();
-							if (err) {
-								return callback(err);
+						collection.update(
+							{
+								'_id': new ObjectID(id)
+							},
+							{
+								$inc: {"pv": 1}
+							},
+							function (err) {
+								mongodb.close();
+								if (err) {
+									return callback(err);
+								}
 							}
-						}
-					);
-						
-			//解析 markdown 为 html
-						//doc.PostJob = markdown.toHTML(doc.PostJob);
-						callback(null, doc);//返回查询的一篇文章						
+						);
+						callback(null, job);//返回查询的一篇文章
 					}
 				}
 			);
@@ -175,36 +164,25 @@ PostJob.edit = function(id, callback) {
 		if (err) {
 			return callback(err);
 		}
-		//读取 jobs 集合
 		db.collection('jobs', function (err, collection) {
 			if (err) {
 				mongodb.close();
 				return callback(err);
 			}
-			//根据用户名、发表日期及文章名进行查询
 			collection.findOne({
 				'_id': new ObjectID(id)
-			}, function (err, doc) {
+			}, function (err, job) {
 				mongodb.close();
 				if (err) {
 					return callback(err);
 				}
-				callback(null, doc);//返回查询的一篇文章（markdown 格式）
+				callback(null, job);
 			});
 		});
 	});
 };
 //更新一篇文章及其相关信息
-PostJob.update = function(id, title, number, sex, age, salary, job, callback) {
-	// var date = new Date(),
-		// time = {
-		// 	date: date,
-		// 	year : date.getFullYear(),
-		// 	month : date.getFullYear() + "-" + (date.getMonth() + 1),
-		// 	day : date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate(),
-		// 	minute : date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate() + " " + 
-		// 	date.getHours() + ":" + (date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()) 
-		// };
+PostJob.update = function(id, title, content, callback) {
 	//打开数据库
 	mongodb.open(function (err, db) {
 		if (err) {
@@ -222,11 +200,7 @@ PostJob.update = function(id, title, number, sex, age, salary, job, callback) {
 			}, {
 				$set: {
 					title: title,
-					number: number,
-					sex: sex,
-					age: age,
-					salary: salary,
-					job: job
+					content: content
 				}
 			}, function (err) {
 				mongodb.close();
@@ -254,7 +228,7 @@ PostJob.remove = function(id, callback) {
 		//查询要删除的文档
 			collection.findOne({
 				"_id": new ObjectID(id)
-			}, function (err, doc) {
+			}, function (err, job) {
 				if (err) {
 					mongodb.close();
 					return callback(err);
@@ -279,194 +253,7 @@ PostJob.remove = function(id, callback) {
 		});
 	});
 };
-//返回所有文章存档信息
-PostJob.getArchive = function(callback) {
-  //打开数据库
-  mongodb.open(function (err, db) {
-	if (err) {
-	  return callback(err);
-	}
-	//读取 jobs 集合
-	db.collection('jobs', function (err, collection) {
-	  if (err) {
-		mongodb.close();
-		return callback(err);
-	  }
-	  //返回只包含 name、time、title 属性的文档组成的存档数组
-	  collection.find({}, {
-		"name": 1,
-		"time": 1,
-		"title": 1
-	  }).sort({
-		time: -1
-	  }).toArray(function (err, docs) {
-		mongodb.close();
-		if (err) {
-		  return callback(err);
-		}
-		callback(null, docs);
-	  });
-	});
-  });
-};
-//返回所有标签
-PostJob.getTags = function(callback) {
-	mongodb.open(function (err, db) {
-		if (err) {
-			return callback(err);
-		}
-		db.collection('jobs', function (err, collection) {
-			if (err) {
-				mongodb.close();
-				return callback(err);
-			}
-	  //distinct 用来找出给定键的所有不同值
-			collection.distinct("tags", function (err, docs) {
-				mongodb.close();
-				if (err) {
-					return callback(err);
-				}
-				callback(null, docs);
-			});
-		});
-	});
-};
-//返回含有特定标签的所有文章
-PostJob.getTag = function(tag, callback) {
-	mongodb.open(function (err, db) {
-		if (err) {
-			return callback(err);
-		}
-		db.collection('jobs', function (err, collection) {
-			if (err) {
-				mongodb.close();
-				return callback(err);
-			}
-	  //查询所有 tags 数组内包含 tag 的文档
-	  //并返回只含有 name、time、title 组成的数组
-			collection.find({
-				"tags": tag
-			}, {
-				"name": 1,
-				"time": 1,
-				"title": 1
-			}).sort({
-				time: -1
-			}).toArray(function (err, docs) {
-				mongodb.close();
-				if (err) {
-					return callback(err);
-				}
-				callback(null, docs);
-			});
-		});
-	});
-};
-//返回通过标题关键字查询的所有文章信息
-PostJob.search = function(keyword, callback) {
-	mongodb.open(function (err, db) {
-		if (err) {
-			return callback(err);
-		}
-		db.collection('jobs', function (err, collection) {
-			if (err) {
-				mongodb.close();
-				return callback(err);
-			}
-			var pattern = new RegExp("^.*" + keyword + ".*$", "i");
-			collection.find({
-				"title": pattern
-			}, {
-				"name": 1,
-				"time": 1,
-				"title": 1
-			}).sort({
-				time: -1
-			}).toArray(function (err, docs) {
-				mongodb.close();
-				if (err) {
-					return callback(err);
-				}
-				callback(null, docs);
-			});
-		});
-	});
-};
-//转载一篇文章
-PostJob.reprint = function(reprint_from, reprint_to, callback) {
-	mongodb.open(function (err, db) {
-		if (err) {
-			return callback(err);
-		}
-		db.collection('jobs', function (err, collection) {
-			if (err) {
-				mongodb.close();
-				return callback(err);
-			}
-		//找到被转载的文章的原文档
-			collection.findOne({
-				'_id': new ObjectID(reprint_from.id)
-			}, function (err, doc) {
-				if (err) {
-					mongodb.close();
-					return callback(err);
-				}
-				var date = new Date();
-				var time = {
-					date: date,
-					year : date.getFullYear(),
-					month : date.getFullYear() + "-" + (date.getMonth() + 1),
-					day : date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate(),
-					minute : date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate() + " " + 
-					date.getHours() + ":" + (date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes())
-				}
-
-				delete doc._id;//注意要删掉原来的 _id
-
-				doc.name = reprint_to.name;
-				doc.head = reprint_to.head;
-				doc.time = time;
-				doc.title = (doc.title.search(/[转载]/) > -1) ? doc.title : doc.title + "<span>[转载]</span>";
-				doc.comments = [];
-				doc.reprint_info = {"reprint_from": reprint_from};
-				doc.pv = 0;
-
-				//将转载生成的副本修改后存入数据库，并返回存储后的文档
-					collection.insert(doc, {
-						safe: true
-					}, function (err, PostJob) {						
-						if (err) {
-							mongodb.close();
-							return callback(err);
-						}
-						//更新被转载的原文档的 reprint_info 内的 reprint_to
-						collection.update({
-							"name": reprint_from.name,
-							"time.minute": reprint_from.minute,
-							"title": reprint_from.title
-						}, {
-								$push: {
-									"reprint_info.reprint_to": {
-										"name": doc.name,
-										"minute": time.minute,
-										"title": doc.title,
-										"id": PostJob[0]._id
-									}
-								}
-							}, function (err) {
-								mongodb.close();
-								if (err) {									
-									return callback(err);
-								}
-							}
-						);						
-						callback(err, PostJob[0]);
-					});
-			});
-		});
-	});
-};
-PostJob.getAll = function (name, callback) {
+PostJob.getAll = function (callback) {
 	mongodb.open(function (err, db) {
 		if (err) {
 			return callback(err);
@@ -479,24 +266,18 @@ PostJob.getAll = function (name, callback) {
 
 			//根据用户名查出所以文章id
 			collection.find(
-				{
-					'name': name
-				},
-				{
-					'_id': 1,
-					'title': 1,
-					'time': 1
-				}
+				{},
+				{}
 			).sort(
 				{
 					time: -1
 				}
-			).toArray(function (err, arrayId) {
+			).toArray(function (err, jobs) {
 				mongodb.close();
 				if (err) {
 					return callback(err);
 				}
-				callback(null, arrayId);
+				callback(null, jobs);
 			});
 		});
 	});

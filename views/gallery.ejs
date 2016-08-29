@@ -4,7 +4,7 @@
 		<% include head %>
 	</head>
 	<body>
-		<div class="new-center manager">
+		<div class="gallery manager backend">
 			<div class="page-nav">
 				<div class="nav-content common-w clearfix">
 					<a href="/" class="logo-container float-l"></a>
@@ -20,29 +20,30 @@
 					</ul>
 				</div>
 			</div>
-			<div class="viewport viewport_new-list">
+			<div class="viewport gallery__main">
 				<div class="viewport__content">
-					<% if (user) {%>
-					<h1 class="viewport__title clearfix">新闻中心						
-						<a href="/post_new" class="btn-post-new float-r">发布新闻</a>
-					</h1>
-					<div class="list">
-					<% news.forEach(function (one, index) { %>
-						<div class="item clearfix">
-							<a href="/new/<%= one._id %>" target="_blank" class="item__title float-l"><%= one.title %></a>
-							<div class="operate float-r">
-								<a href="/edit/new/<%= user.name  %>/<%= one._id %>">编辑</a>
-								<a href="/delete/new/<%= user.name  %>/<%= one._id %>">删除</a>
-							</div>
-							<span class="new__date float-r"><%= one.time.minute %></span>							
+					<h1 class="viewport__title clearfix">图库
+						<a href="javascript:;" class="btn-post-new float-r">上传新图</a></h1>
+					<div class="list-wrapper">
+						<div class="list">
+							<% pics.forEach(function(pic) {%>
+								<div class="pic-item">
+									<div class="pic-wrapper">
+										<img src="<%= pic.url.url%>" alt="青海恒信融锂业科技有限公司">
+									</div>
+									<div class="pic__url">图片链接：<%= pic.url.url%></div>
+								</div>
+							<%})%>
 						</div>
-					<% }) %>
-						<% include paging %>
 					</div>
-					<% } %>
+					<div class="gallery__form">
+						<input type="file" id="image" name="image">
+						<a class="submit" href="javascript:;">确认</a>
+					</div>
 				</div>
 			</div>
 			<% include footer %>
+			<script src="/js/gallery.js"></script>
 		</div>
 	</body>
 </html>

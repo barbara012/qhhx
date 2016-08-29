@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<link rel="stylesheet" href="/simditor/styles/simditor.css"/>
 		<% include head %>
 	</head>
 	<body>
@@ -21,44 +20,48 @@
 					</ul>
 				</div>
 			</div>
-			<div class="viewport viewport_post-new">
+			<div class="viewport viewport_post-link">
 				<div class="viewport__content">
-					<form action="/post_new" method="post">
+				<% if (editType == 'new') { %>
+					<form action="/post_link" method="post">
 						<div class="form__item clearfix">
-							<label for="post__title" class="form__item__label">新闻分类</label>
+							<label for="post__title" class="form__item__label">链接标题</label>
 							<div class="text-wrapper">
-								<select name="newtype" class="form__item__select" required="required" id="post__type">
-									<option value="1" selected>新闻媒体</option>
-									<option value="2">市场活动</option>
-									<option value="3">团建分享</option>
-								</select>
+								<input type="text" class="form__item__text" required="required" name="title" id="post__title">
 							</div>
 						</div>
 						<div class="form__item clearfix">
-							<label for="post__title" class="form__item__label">新闻标题</label>
+							<label for="post_content" class="form__item__label">链接地址</label>
 							<div class="text-wrapper">
-								<input type="text" class="form__item__text" required="required" name="newtitle" id="post__title">
-							</div>
-						</div>
-						<div class="form__item clearfix">
-							<label for="post_content" class="form__item__label">新闻内容</label>
-							<div class="text-wrapper">
-								<textarea name="newcontent" required="required" id="post__content"></textarea>
+								<input type="text" placeholder="http://" class="form__item__text" required="required" name="url" id="post__url">
 							</div>
 						</div>
 						<div class="form__item txt-c">
 							<button type="submit" required="required" class="submit-btn">确认发布</button>
 						</div>
-						<input type="hidden" id="hidden">
 					</form>
+				<% } else { %>
+					<form action="/edit/link/<%= link._id %>" method="post">
+						<div class="form__item clearfix">
+							<label for="post__title" class="form__item__label">链接标题</label>
+							<div class="text-wrapper">
+								<input type="text" class="form__item__text" value="<%= link.title %>" required="required" name="title" id="post__title">
+							</div>
+						</div>
+						<div class="form__item clearfix">
+							<label for="post_content" class="form__item__label">链接地址</label>
+							<div class="text-wrapper">
+								<input type="text" placeholder="http://"  value="<%= link.url %>" class="form__item__text" required="required" name="url" id="post__url">
+							</div>
+						</div>
+						<div class="form__item txt-c">
+							<button type="submit" required="required" class="submit-btn">确认发布</button>
+						</div>
+					</form>
+				<% } %>
 				</div>
 			</div>
 			<% include footer %>
-			<script type="text/javascript" src="/simditor/scripts/module.js"></script>
-			<script type="text/javascript" src="/simditor/scripts/hotkeys.js"></script>
-			<script type="text/javascript" src="/simditor/scripts/uploader.js"></script>
-			<script type="text/javascript" src="/simditor/scripts/simditor.js"></script>
-			<script src="/js/postImg.js"></script>
 		</div>
 	</body>
 </html>

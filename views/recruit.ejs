@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
+		<link rel="stylesheet" href="/simditor/styles/simditor.css"/>
 		<% include head %>
 	</head>
 	<body>
@@ -13,10 +14,8 @@
 						<li class="nav__menu_item float-l"><a href="/about_us" class="menu__item_txt">企业介绍</a></li>
 						<li class="nav__menu_item float-l"><a href="/new_center" class="menu__item_txt">动态要闻</a></li>
 						<li class="nav__menu_item float-l"><a href="/product_show" class="menu__item_txt">产品介绍</a></li>
-						<!--<li class="nav__menu_item float-l"><a href="/product_show" class="menu__item_txt">合作伙伴</a></li>-->
-						<!--<li class="nav__menu_item float-l"><a href="about_us" class="menu__item_txt">关于我们</a></li>-->
-						<!--<li class="nav__menu_item float-l"><a href="/custom_case" class="menu__item_txt">客户案例</a></li>-->
-						<li class="nav__menu_item float-l"><a href="/custom_case" class="menu__item_txt">行业链接</a></li>
+						<li class="nav__menu_item float-l"><a href="/partner_show" class="menu__item_txt">合作伙伴</a></li>
+						<li class="nav__menu_item float-l"><a href="/links" class="menu__item_txt">行业链接</a></li>
 						<li class="nav__menu_item float-l"><a href="/recruit" class="menu__item_txt active">加入我们</a></li>
 						<li class="nav__menu_item float-l"><a href="/contact_us" class="menu__item_txt">联系我们</a></li>
 					</ul>
@@ -26,73 +25,36 @@
 				<div class="left">
 					<div class="jobs">
 						<ul class="job-list">
+							<% jobs.forEach(function(job, index){%>
 							<li>
-								<a href="" class="selected">前端工程师</a>
+								<a href="/job?jobId=<%= job._id %>" class="job-list__item <%= (index === 0) ? 'selected' : '' %>"><%= job.title %></a>
 							</li>
-							<li>
-								<a href="">产品经理</a>
-							</li>
-							<li>
-								<a href="">车间办公室主任</a>
-							</li>
-							<li>
-								<a href="">前端工程师</a>
-							</li>
-							<li>
-								<a href="">产品经理</a>
-							</li>
-							<li>
-								<a href="">车间办公室主任</a>
-							</li>
-							<li>
-								<a href="">前端工程师</a>
-							</li>
-							<li>
-								<a href="">产品经理</a>
-							</li>
-							<li>
-								<a href="">车间办公室主任</a>
-							</li>
-							<li>
-								<a href="">前端工程师</a>
-							</li>
-							<li>
-								<a href="">产品经理</a>
-							</li>
-							<li>
-								<a href="">车间办公室主任</a>
-							</li>
-							<li>
-								<a href="">前端工程师</a>
-							</li>
-							<li>
-								<a href="">产品经理</a>
-							</li>
-							<li>
-								<a href="">车间办公室主任</a>
-							</li>
-							<li>
-								<a href="">前端工程师</a>
-							</li>
-							<li>
-								<a href="">产品经理</a>
-							</li>
-							<li>
-								<a href="">车间办公室主任</a>
-							</li>
+							<%})%>
 						</ul>
 					</div>
 				</div>
 				<div class="right">
 					<div class="right__main">
+						<% if ( job == 0) {%>
 						<h1 class="job__title">车间这两件</h1>
 						<div class="job__detail">
-							职 位：销售经理 需 求：4人 工作地点：上海-普陀区 岗位要求： 1、专科及以上学历，男女不限； 2、理工类（含化工等）相关专业毕业；或具有相关专业知识者优先； 3、对碳酸锂行业及市场有一定的了解；具备相关产品的销售技能；或具有相关产品销售渠道和客户资源 者优先； 4、良好的英语读写能力，听说熟练者优先； 5、3年以上工作经验，有相关行业工作经验者优先； 6、积极主动、性格开朗、讲效率、乐于接受挑战； 7、有良好的口头表达能力及服务意识；形象气质佳，擅长市场开拓及客户维护； 8、极强的责任心，独立工作能力和良好的团队协作精神； 9、熟练操作电脑及office办公软件，适应出差。 岗位职责： 1、掌握、收集和反馈碳酸锂行业的各类产业政策，负责碳酸锂市场的相关调研及有效信息搜集与整理； 2、负责客户信息的搜集，了解客户需求，积极的开发客户资源并建立良好的合作关系； 3、负责搜集整理客户对我方产品的反馈意见，协调客户与公司相关部门的沟通联络； 4、预测渠道危机，呈报并处理； 5、按企业回款制度，催收或结算货款。 薪资待遇： 6000元-10000元
+							<div class="not-tip">还未发布过任何职位</div>
 						</div>
+						<%} else {%>
+						<h1 class="job__title"><%= job.title %></h1>
+						<div class="job__detail">
+							<div class="simditor">
+								<div class="simditor-body">
+									<%- job.content %>
+								</div>
+							</div>
+						</div>
+						<%}%>
 					</div>
 				</div>
 			</div>
 			<% include footer %>
+			<script src="js/recruit.js"></script>
 		</div>
 	</body>
 </html>
