@@ -84,6 +84,35 @@ Post.getTen = function(page, callback) {
         });
     });
 };
+//获取指定数量
+Post.getSome = function(limit, callback) {
+    //打开数据库
+    mongodb.open(function (err, db) {
+        if (err) {
+            return callback(err);
+        }
+        //读取 products 集合
+        db.collection('partners', function (err, collection) {
+            if (err) {
+                mongodb.close();
+                return callback(err);
+            }
+            var query = {};
+            //使用 count 返回特定查询的文档数 total
+            collection.find(query, {
+                limit: limit
+            }).sort({
+                time: -1
+            }).toArray(function (err, partners) {
+                mongodb.close();
+                if (err) {
+                    return callback(err);
+                }
+                callback(null, partners);
+            });
+        });
+    });
+};
 //获取一个合作伙伴
 Post.getOne = function(id, callback) {
     //打开数据库

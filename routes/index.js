@@ -18,11 +18,17 @@ var crypto = require('crypto'),
 module.exports = function (app) {
 
 	app.get('/', function (req, res) {
-		res.render('index', {
-			user: req.session.user,
-			title: '青海恒信融锂业科技有限公司',
-			success: req.flash('success').toString(),
-			error: req.flash('error').toString()
+		PostPartner.getSome(10, function(err, partners) {
+			if (err) {
+				partners = [];
+			}
+			res.render('index', {
+				user: req.session.user,
+				partners: partners,
+				title: '青海恒信融锂业科技有限公司',
+				success: req.flash('success').toString(),
+				error: req.flash('error').toString()
+			});
 		});
 	});
 	// //注册

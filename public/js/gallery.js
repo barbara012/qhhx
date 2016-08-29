@@ -31,11 +31,6 @@ $(document).ready(function() {
             if (request.readyState === 4 && callback)
                 callback(request);
         };
-        // request.upload.onprogress = function (event) {
-        // 	if (event.lengthComputable) {
-        // 	 	setProgress(event.loaded / event.total);
-        // 	}
-        // };
         request.open("POST", url);
         request.send(formdata);
     }
@@ -79,6 +74,4 @@ $(document).ready(function() {
            $gallery.hide();
        });
     });
-    //post
-    var flagPost = 0;
 });
