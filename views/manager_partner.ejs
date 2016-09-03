@@ -23,14 +23,14 @@
     <div class="viewport">
         <div class="viewport__content">
             <% if (user) {%>
-            <h1 class="viewport__title clearfix">产品介绍管理
+            <h1 class="viewport__title clearfix">合作伙伴管理
                 <a href="/post_partner" class="btn-post-new float-r">上传合作伙伴</a>
             </h1>
             <div class="product-wrapper">
                 <div class="product__list">
                 <% partners.forEach(function (one) { %>
                     <div class="item">
-                        <a href="/partner/<%= one._id %>">
+                        <a href="javascript:;">
                             <div class="item__pic">
                                 <img src="<%- one.partner %>" alt="青海恒信融锂业科技有限公司">
                             </div>
