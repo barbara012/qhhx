@@ -115,10 +115,9 @@ code {
 	height: 1000px;
 	overflow: hidden;
 	.slider__item {
+		padding-top: 1px;
 		height: 1000px;
-		display: block;
-		background-repeat: no-repeat;
-		background-position: center;
+		background: no-repeat center;
 	}
 	.slider__item1 {
 		background-image: url(/img/index/banner1.jpg)
@@ -148,6 +147,41 @@ code {
 			&.on {
 				background-color: transparent;
 			}
+		}
+	}
+	.new-list {
+		width: 1024px;
+		margin: 680px auto 0;
+		font-size: 0;
+	}
+	.new-item {
+		width: 320px;
+		display: inline-block;
+		font-size: 14px;
+		margin-left: 32px;
+		cursor: pointer;
+		span,p,div,a {
+			color: #fff !important;
+		}
+		&:first-child {
+			margin-left: 0;
+		}
+	}
+	.new__title {
+		font-size: 16px;
+		line-height: 40px;
+		border-top: 1px solid #fff;
+		border-bottom: 1px solid #fff;
+	}
+	.new__content {
+		height: 162px;
+		padding: 15px 0 25px;
+		border-bottom: 1px solid #fff;
+		overflow: hidden;
+		text-indent: 30px;
+		.inner {
+			height: 100%;
+			overflow: hidden;
 		}
 	}
 }
@@ -198,51 +232,13 @@ code {
 		}
 	}
 	.cnt-about-us {
-		// .swiper-slide {
-		// 	height: 200px;
-		// }
 		p {
 			text-indent: 37px;
-		}
-		.slider__item {
-			height: 200px;
-			display: block;
 		}
 		.cnt__banner {
 			height: 103px;
 			margin-bottom: 50px;
 			background: url(/img/index/about-us.jpg) center;
-		}
-		.hd {
-			ul {
-				background: url("/img/index/nav_bg.jpg") left 50px center no-repeat, url("/img/index/nav_bg.jpg") right 50px center no-repeat;
-			}
-			li {
-				width: 12px;
-				height: 12px;
-				border-radius: 10px;
-				background-color: #e6e7e8;
-				margin: 0 10px;
-				&.on {
-					background-color: #36bdd0;
-				}
-			}
-		}
-		.next,
-		.prev {
-			position: absolute;
-			width: 30px;
-			height: 30px;
-			border-radius: 5px;
-			bottom: -3px;
-			background: #e7e8e9;
-			text-indent: -99999px;
-		}
-		.prev {
-			left: 0;
-		}
-		.next {
-			right: 0;
 		}
 	}
 	.cnt-as__tech {
@@ -255,6 +251,30 @@ code {
 		margin-left: 9px;
 		&:first-child {
 			margin-left: 0;
+		}
+	}
+	.cnt__tech__item1 {
+		background-image: url("/img/index/1.jpg");
+		&:hover {
+			background-image: url("/img/index/1-1.jpg");
+		}
+	}
+	.cnt__tech__item2 {
+		background-image: url("/img/index/2.jpg");
+		&:hover {
+			background-image: url("/img/index/2-1.jpg");
+		}
+	}
+	.cnt__tech__item3 {
+		background-image: url("/img/index/3.jpg");
+		&:hover {
+			background-image: url("/img/index/3-1.jpg");
+		}
+	}
+	.cnt__tech__item4 {
+		background-image: url("/img/index/4.jpg");
+		&:hover {
+			background-image: url("/img/index/4-1.jpg");
 		}
 	}
 	.cnt-partner {

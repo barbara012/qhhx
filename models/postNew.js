@@ -56,7 +56,7 @@ Post.prototype.save = function(callback) {
 	});
 };
 
-//一次获取十篇文章
+//一次获取十篇新闻
 Post.getTen = function(page, type, callback) {
 	//打开数据库
 	mongodb.open(function (err, db) {
@@ -99,7 +99,39 @@ Post.getTen = function(page, type, callback) {
 		});
 	});
 };
-//获取一篇文章
+Post.getSome = function(limit, type, callback) {
+	//打开数据库
+	mongodb.open(function (err, db) {
+		if (err) {
+			return callback(err);
+		}
+		//读取 news 集合
+		db.collection('news', function (err, collection) {
+			if (err) {
+				mongodb.close();
+				return callback(err);
+			}
+			var query = {};
+			if (type) {
+				query = {
+					type: type
+				}
+			}
+			collection.find(query, {
+				limit: limit
+			}).sort({
+				time: -1
+			}).toArray(function (err, news) {
+				mongodb.close();
+				if (err) {
+					return callback(err);
+				}
+				callback(null, news);
+			});
+		});
+	});
+};
+//获取一篇新闻
 Post.getOne = function(id, callback) {
 	//打开数据库
 	mongodb.open(function (err, db) {

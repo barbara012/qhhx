@@ -26,9 +26,57 @@
 				</div>
 				<div class="bd">
 					<ul class="pic-list">
-						<li><a href="javascript:;" class="slider__item slider__item1"></a></li>
-						<li><a href="javascript:;" class="slider__item slider__item2"></a></li>
-						<li><a href="javascript:;" class="slider__item slider__item3"></a></li>
+						<li>
+							<div class="slider__item slider__item1">
+								<div class="new-list">
+									<% news.forEach(function(item){ %>
+									<div data-link="/new/<%= item._id %>" class="new-item">
+										<div class="new__title clearfix">
+											<span class="float-l">新闻媒体</span>
+											<span class="float-r"><%- item.time.day %></span>
+										</div>
+										<div class="new__content">
+											<div class="inner"><%- item.post %></div>
+										</div>
+									</div>
+									<%})%>
+								</div>
+							</div>
+						</li>
+						<li>
+							<div class="slider__item slider__item2">
+								<div class="new-list">
+									<% news.forEach(function(item){ %>
+									<div data-link="/new/<%= item._id %>" class="new-item">
+										<div class="new__title clearfix">
+											<span class="float-l">新闻媒体</span>
+											<span class="float-r"><%- item.time.day %></span>
+										</div>
+										<div class="new__content">
+											<div class="inner"><%- item.post %></div>
+										</div>
+									</div>
+									<%})%>
+								</div>
+							</div>
+						</li>
+						<li>
+							<div class="slider__item slider__item3">
+								<div class="new-list">
+									<% news.forEach(function(item){ %>
+									<div data-link="/new/<%= item._id %>" class="new-item">
+										<div class="new__title clearfix">
+											<span class="float-l">新闻媒体</span>
+											<span class="float-r"><%- item.time.day %></span>
+										</div>
+										<div class="new__content">
+											<div class="inner"><%- item.post %></div>
+										</div>
+									</div>
+									<%})%>
+								</div>
+							</div>
+						</li>
 					</ul>
 				</div>				
 			</div>
@@ -46,35 +94,14 @@
 										<p>青海恒信融锂业科技有限公司于2014年成立于青海省格尔木市，人事锂、钾、硼、镁盐湖资源产品的研究开发、销售和新材料应用等;恒信融锂业致力于盐湖资源的综合开发利用，生产高品质的电池级碳酸锂，满足客户的产品需求。我公司热忱期望与各界同仁携手一道，为共同推进中国锂电产业发展不懈努力!</p>
 									</div>
 								</li>
-								<li>
-									<div class="slider__item slider__item2">
-										<p>陕西帝奥电梯有限公司是我国西部地区规模最大的电梯、自动扶梯生产销售基地及服务中心。公司拥有年产15000台电梯的生产制造基地,总投资4亿元人民币，总占地面积303亩，其中一期建筑面积70亩，二期建筑面积233亩。公司建有电梯控制柜生产流水线、电梯喷粉生产线及电梯物联网系统。公司集产品研发、设计、制造、销售、安装、维保于一体，绿色环保贯穿整个产品生产流程。为保证产品质量，公司从国外进口多功位数控冲床、数控加工中心、折弯机、数控激光机等国际先进设备，为公司的生产提供基本保障。</p>
-									</div>
-								</li>
-								<li><div class="slider__item slider__item3">
-									<p>公司持有A级特种设备制造许可证和B级安装、改造、维修许可证。通过质量管理体系、职业健康安全管理体系、环境管理体系认证，并获得“国际知名品牌”、“国际品质•服务•诚信AAA企业”、“中国绿色节能环保品牌”、“全国质量信得过单位”名牌认证。产品涵盖自动扶梯、自动人行道、乘客电梯、住宅电梯、无机房电梯、医用电梯、观光电梯、家用电梯、载货电梯、液压电梯、自动停车设备等十一大类系列组成。</p>
-								</div></li>
 							</ul>
-						</div>
-						<div class="hd">
-							<a class="next"></a>
-							<ul></ul>
-							<a class="prev"></a>
 						</div>
 					</div>
 					<div class="cnt-as__tech">
-						<div class="cnt__tech__item">
-							<img src="/img/index/01.jpg" alt="生产制造-青海恒信融锂业科技有限公司">
-						</div>
-						<div class="cnt__tech__item">
-							<img src="/img/index/02.jpg" alt="生产制造-青海恒信融锂业科技有限公司">
-						</div>
-						<div class="cnt__tech__item">
-							<img src="/img/index/03.jpg" alt="系统工程-青海恒信融锂业科技有限公司">
-						</div>
-						<div class="cnt__tech__item">
-							<img src="/img/index/04.jpg" alt="贸易代理-青海恒信融锂业科技有限公司">
-						</div>
+						<div class="cnt__tech__item cnt__tech__item1"></div>
+						<div class="cnt__tech__item cnt__tech__item2"></div>
+						<div class="cnt__tech__item cnt__tech__item3"></div>
+						<div class="cnt__tech__item cnt__tech__item4"></div>
 					</div>
 				</div>
 			</div>
@@ -102,24 +129,15 @@
 					mainCell: ".bd ul",
 					autoPage: true,
 					effect:"left",
-					autoPlay:true,
+					autoPlay:false,
 					vis:1,
 					trigger:"click"
 				});
-				jQuery(".cnt-as__slider").slide({
-					titCell: ".hd ul",
-					mainCell: ".bd ul",
-					effect:"fade",
-					autoPage: true,
-					vis:1,
-					trigger:"click"
-				});
-				jQuery(".cnt-products__slider").slide({
-					effect:"left",
-					autoPlay:true
+
+				$('[data-link]').click(function() {
+					location.href = $(this).data('link');
 				});
 				//
-				Tab.enable();
 			});
 		</script>
 	</body>
