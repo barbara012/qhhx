@@ -18,7 +18,7 @@ gulp.task('less', function () {
 gulp.task('lessWithOutCompress', function () {
     gulp.src(['./public/stylesheets/*.less'])
         .pipe(less({
-            compress: false
+            compress: true
         }))
         .on('error', function (error) {
             console.log(error);
