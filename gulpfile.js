@@ -5,7 +5,6 @@ gulp.task('uglify', function () {
     gulp.src(['./public/js/*.js', '!./public/js/*.min.js'])
         .pipe(uglify())
         .pipe(gulp.dest('./public/js'));
-    gulp.run('less');
 });
 
 gulp.task('less', function () {
