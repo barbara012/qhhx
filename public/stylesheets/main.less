@@ -249,8 +249,23 @@ code {
 		width: 249px;
 		height: 249px;
 		margin-left: 9px;
+		font-size: 12px;
+		position: relative;
 		&:first-child {
 			margin-left: 0;
+		}
+		.ct {
+			position: absolute;
+			bottom: 25px;
+			width: 100%;
+			padding: 0 10px;
+			color: #fff;
+			display: none;
+		}
+		&:hover {
+			.ct {
+				display: block;
+			}
 		}
 	}
 	.cnt__tech__item1 {
